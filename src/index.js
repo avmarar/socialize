@@ -2,17 +2,31 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import mongoose from "mongoose";
 
+import Post from "./models/Post.js";
 import { MONGODB_CONNECTION_STRING } from "../config/config.js";
 
 const typeDefs = `#graphql
+  type Post {
+    id: ID!
+    body: String!
+    username: String!
+    createdAt: String!
+  }
   type Query {
-    sayHi: String
+    getPosts: [Post]
   }
 `;
 
 const resolvers = {
   Query: {
-    sayHi: () => "Hello World!",
+    getPosts: async () => {
+      try {
+        const posts = await Post.find();
+        return posts;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
 };
 
