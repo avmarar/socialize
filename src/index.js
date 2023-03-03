@@ -13,6 +13,8 @@ const server = new ApolloServer({
 
 mongoose.connect(MONGODB_CONNECTION_STRING).then(async () => {
   console.log("****Connected to MongoDB****");
-  const { url } = await startStandaloneServer(server);
+  const { url } = await startStandaloneServer(server, {
+    context: async ({ req }) => ({ req }),
+  });
   console.log(`****Server ready at: ${url}****`);
 });
