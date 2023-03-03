@@ -2,12 +2,68 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
 
-import { validateRegisterInput } from "../../utils/validators.js";
+import {
+  validateLoginInput,
+  validateRegisterInput,
+} from "../../utils/validators.js";
 import { SECRET_KEY } from "../../../config/config.js";
 import User from "../../models/User.js";
 
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+    SECRET_KEY,
+    { expiresIn: "1h" }
+  );
+};
+
 export default {
   Mutation: {
+    login: async (_, { username, password }) => {
+      //Validate login data
+      const { valid, errors } = validateLoginInput(username, password);
+
+      if (!valid) {
+        throw new GraphQLError(" Login Data Validation Error", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            exception: { errors },
+          },
+        });
+      }
+
+      const user = await User.findOne({ username });
+      if (!user) {
+        throw new GraphQLError("User not found!", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+
+      if (!match) {
+        throw new GraphQLError("Invalid Credentials!", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            exception: { errors },
+          },
+        });
+      }
+
+      const token = generateToken(user);
+
+      return {
+        ...user._doc,
+        id: user._id,
+        token,
+      };
+    },
     register: async (
       _,
       { registerInput: { username, email, password, confirmPassword } },
@@ -50,15 +106,7 @@ export default {
 
       const res = await newUser.save();
 
-      const token = jwt.sign(
-        {
-          id: res.id,
-          email: res.email,
-          username: res.username,
-        },
-        SECRET_KEY,
-        { expiresIn: "1h" }
-      );
+      const token = generateToken(res);
 
       return {
         ...res._doc,
