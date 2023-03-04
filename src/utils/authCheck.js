@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 
 import { SECRET_KEY } from "../../config/config.js";
 
-const authCheck = (context) => {
-  const authHeader = context.req.headers.authorization;
+const authCheck = ({ token }) => {
+  const authHeader = token;
 
   if (authHeader) {
     //Bearer....

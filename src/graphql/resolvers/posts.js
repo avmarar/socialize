@@ -2,6 +2,7 @@ import { GraphQLError } from "graphql";
 
 import Post from "../../models/Post.js";
 import { authCheck } from "../../utils/authCheck.js";
+import { pubsub } from "../pubsub.js";
 
 export default {
   Query: {
@@ -38,6 +39,10 @@ export default {
       });
 
       const post = await newPost.save();
+
+      pubsub.publish("NEW_POST", {
+        newPost: post,
+      });
 
       return post;
     },
@@ -80,6 +85,13 @@ export default {
       } else {
         throw new Error("Post not found");
       }
+    },
+  },
+  Subscription: {
+    newPost: {
+      subscribe: () => {
+        return pubsub.asyncIterator("NEW_POST");
+      },
     },
   },
 };
