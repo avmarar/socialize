@@ -8,5 +8,6 @@ export default {
   Mutation: {
     ...userResolvers.Mutation,
     ...postResolvers.Mutation,
+    ...commentResolvers.Mutation,
   },
 };
