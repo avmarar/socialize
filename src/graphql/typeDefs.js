@@ -13,6 +13,11 @@ type Comment{
   username: String!
   createdAt: String!
 }
+type Like {
+  id: ID!
+  username: String!
+  createdAt: String!
+}
 type User{
   id:ID!
   email:String!
@@ -37,5 +42,6 @@ type Mutation {
   deletePost(postId:ID!):String!
   createComment(body:String!, postId:ID!):Post!
   deleteComment(postId:ID!, commentId:ID!):Post!
+  likePost(postId:ID!):Post!
 }
 `;
