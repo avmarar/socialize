@@ -11,25 +11,23 @@ import {
   Loader,
 } from "semantic-ui-react";
 import { REGISTER_USER } from "../graphql/mutations";
+import { useForm } from "../utils/hooks";
 
-const Register = (props) => {
+const Register = () => {
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+  const navigate = useNavigate();
+
+  const { onChange, onSubmit, values } = useForm(registerUser, {
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const navigate = useNavigate();
-
-  const redirectToHome = () => {
-    window.location.pathname = "/";
-    // navigate("/", { replace: true });
-  };
-
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
-    onCompleted: redirectToHome,
+    onCompleted: () => {
+      navigate("/");
+    },
     onError: (error) => {
       if (error)
         setErrors(error?.graphQLErrors?.[0]?.extensions?.exception?.errors);
@@ -37,14 +35,9 @@ const Register = (props) => {
     variables: values,
   });
 
-  const registerUser = (e) => {
-    e.preventDefault();
+  function registerUser() {
     addUser();
-  };
-
-  const handleOnChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+  }
 
   return (
     <>
@@ -62,7 +55,7 @@ const Register = (props) => {
           <Header as="h2" color="teal" textAlign="center">
             Register
           </Header>
-          <Form size="large" onSubmit={registerUser} noValidate>
+          <Form size="large" onSubmit={onSubmit} noValidate>
             <Segment stacked>
               <Form.Input
                 fluid
@@ -71,7 +64,7 @@ const Register = (props) => {
                 name="username"
                 type="text"
                 value={values?.username}
-                onChange={handleOnChange}
+                onChange={onChange}
                 icon="user"
                 iconPosition="left"
                 error={errors?.username}
@@ -83,7 +76,7 @@ const Register = (props) => {
                 name="email"
                 type="email"
                 value={values?.email}
-                onChange={handleOnChange}
+                onChange={onChange}
                 icon="mail"
                 iconPosition="left"
                 error={errors?.email}
@@ -95,7 +88,7 @@ const Register = (props) => {
                 name="password"
                 type="password"
                 value={values?.password}
-                onChange={handleOnChange}
+                onChange={onChange}
                 icon="lock"
                 iconPosition="left"
                 error={errors?.password}
@@ -107,7 +100,7 @@ const Register = (props) => {
                 name="confirmPassword"
                 type="password"
                 value={values?.confirmPassword}
-                onChange={handleOnChange}
+                onChange={onChange}
                 icon="lock"
                 iconPosition="left"
                 error={errors?.confirmPassword}

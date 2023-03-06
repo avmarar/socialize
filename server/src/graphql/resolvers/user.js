@@ -41,6 +41,7 @@ export default {
         throw new GraphQLError("User not found!", {
           extensions: {
             code: "BAD_USER_INPUT",
+            exception: { errors: { username: "Invalid username" } },
           },
         });
       }
@@ -51,7 +52,7 @@ export default {
         throw new GraphQLError("Invalid Credentials!", {
           extensions: {
             code: "BAD_USER_INPUT",
-            exception: { errors },
+            exception: { errors: { password: "Incorrect password" } },
           },
         });
       }
