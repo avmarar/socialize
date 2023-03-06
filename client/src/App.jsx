@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { Container } from "semantic-ui-react";
 
 import "semantic-ui-css/semantic.min.css";
@@ -10,6 +15,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import MenuBar from "./components/MenuBar";
 import { AuthProvider } from "./context/auth";
+import AuthRoute from "./utils/AuthRoute";
 
 function App() {
   return (
@@ -19,8 +25,22 @@ function App() {
           <MenuBar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/login"
+              element={
+                <AuthRoute redirectTo={"/"}>
+                  <Login />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <AuthRoute redirectTo={"/"}>
+                  <Register />
+                </AuthRoute>
+              }
+            />
           </Routes>
         </Container>
       </Router>

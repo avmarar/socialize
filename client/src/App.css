@@ -1,5 +1,11 @@
 .page-title{
-    display: block !important;
-    text-align: center;
     margin-top: 25px;
+}
+.header-column {
+    display: flex;
+    flex: auto;
+}
+.btn-column {
+    display: flex !important;
+    align-items: flex-end;
 }

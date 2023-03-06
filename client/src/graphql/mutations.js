@@ -35,4 +35,14 @@ const LOGIN_USER = gql`
     }
   }
 `;
-export { REGISTER_USER, LOGIN_USER };
+
+const CREATE_POST = gql`
+  mutation CreatePost($body: String!) {
+    createPost(body: $body) {
+      id
+      createdAt
+      username
+    }
+  }
+`;
+export { REGISTER_USER, LOGIN_USER, CREATE_POST };

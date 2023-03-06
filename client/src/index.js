@@ -1,12 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-const client = new ApolloClient({
+const httplink = new HttpLink({
   uri: "http://localhost:4000/graphql",
+});
+
+const authLink = setContext((_, { headers }) => {
+  const userToken = JSON.parse(localStorage.getItem("userToken"));
+  return {
+    headers: {
+      ...headers,
+      Authorization: userToken ? `Bearer ${userToken.token}` : "",
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httplink),
   cache: new InMemoryCache(),
 });
 
