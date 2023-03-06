@@ -18,7 +18,7 @@ const PostCard = ({
       <Card.Content extra>
         <Button as="div" labelPosition="right">
           <Button icon color="red">
-            <Icon name="heart" color="white" />
+            <Icon name="heart" />
           </Button>
           <Label as="a" basic color="red" pointing="left">
             {likeCount}
@@ -26,7 +26,7 @@ const PostCard = ({
         </Button>
         <Button as="div" labelPosition="right">
           <Button icon color="teal">
-            <Icon name="comments" color="white" />
+            <Icon name="comments" />
           </Button>
           <Label as="a" basic color="teal" pointing="left">
             {commentCount}

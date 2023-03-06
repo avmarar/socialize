@@ -91,6 +91,11 @@ export default {
         throw new GraphQLError("Username already exist!", {
           extensions: {
             code: "BAD_USER_INPUT",
+            exception: {
+              errors: {
+                username: "Username already exist",
+              },
+            },
           },
         });
       }

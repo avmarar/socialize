@@ -12,7 +12,7 @@ const MenuBar = () => {
 
   return (
     <div>
-      <Menu pointing secondary size="massive" color="blue">
+      <Menu pointing secondary size="massive" color="teal">
         <Menu.Item
           name="home"
           active={activeItem === "home"}
