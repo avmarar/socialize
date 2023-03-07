@@ -31,7 +31,7 @@ const PostForm = () => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button>Create Post</Button>}
+      trigger={<Button color="teal">Create Post</Button>}
     >
       <Modal.Header>Write your post here.....</Modal.Header>
       <Modal.Content>

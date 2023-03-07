@@ -13,6 +13,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Post from "./pages/Post";
 import MenuBar from "./components/MenuBar";
 import { AuthProvider } from "./context/auth";
 import AuthRoute from "./utils/AuthRoute";
@@ -41,6 +42,8 @@ function App() {
                 </AuthRoute>
               }
             />
+            <Route path="/posts/:postId" element={<Post />} />
+            <Route path="*" element={<Navigate to={"/"} />} />
           </Routes>
         </Container>
       </Router>

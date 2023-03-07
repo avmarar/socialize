@@ -45,4 +45,55 @@ const CREATE_POST = gql`
     }
   }
 `;
-export { REGISTER_USER, LOGIN_USER, CREATE_POST };
+
+const DELETE_POST = gql`
+  mutation DeletePost($postId: ID!) {
+    deletePost(postId: $postId)
+  }
+`;
+
+const LIKE_POST = gql`
+  mutation LikePost($postId: ID!) {
+    likePost(postId: $postId) {
+      id
+      username
+      likes {
+        id
+        username
+        createdAt
+      }
+      likeCount
+      createdAt
+    }
+  }
+`;
+
+const CREATE_COMMENT = gql`
+  mutation CreateComment($body: String!, $postId: ID!) {
+    createComment(body: $body, postId: $postId) {
+      id
+      createdAt
+      username
+    }
+  }
+`;
+
+const DELETE_COMMENT = gql`
+  mutation DeleteComment($body: String!, $commentId: ID!) {
+    deleteComment(body: $body, commentId: $commentId) {
+      id
+      createdAt
+      username
+    }
+  }
+`;
+
+export {
+  REGISTER_USER,
+  LOGIN_USER,
+  CREATE_POST,
+  LIKE_POST,
+  DELETE_POST,
+  CREATE_COMMENT,
+  DELETE_COMMENT,
+};
