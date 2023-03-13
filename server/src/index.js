@@ -13,7 +13,7 @@ import typeDefs from "./graphql/typeDefs.js";
 import resolvers from "./graphql/resolvers/index.js";
 import { MONGODB_CONNECTION_STRING } from "../config/config.js";
 
-const PORT = process.env.port || 4000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
