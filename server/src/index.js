@@ -13,7 +13,7 @@ import typeDefs from "./graphql/typeDefs.js";
 import resolvers from "./graphql/resolvers/index.js";
 import { MONGODB_CONNECTION_STRING } from "../config/config.js";
 
-const PORT = 4000;
+const PORT = process.env.port || 4000;
 
 const app = express();
 
@@ -34,24 +34,31 @@ const wsServer = new WebSocketServer({
 
 useServer({ schema }, wsServer);
 
-mongoose.connect(MONGODB_CONNECTION_STRING).then(async () => {
-  console.log("****Connected to MongoDB****");
-  await server.start();
+mongoose
+  .connect(MONGODB_CONNECTION_STRING)
+  .then(async () => {
+    console.log("****Connected to MongoDB****");
+    await server.start();
 
-  app.use(
-    "/graphql",
-    cors(),
-    bodyParser.json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => ({
-        token: req.headers.authorization,
-      }),
-    })
-  );
-  httpServer.listen(PORT, () => {
-    console.log(`🚀 Query endpoint ready at http://localhost:${PORT}/graphql`);
-    console.log(
-      `🚀 Subscription endpoint ready at ws://localhost:${PORT}/graphql `
+    app.use(
+      "/graphql",
+      cors(),
+      bodyParser.json(),
+      expressMiddleware(server, {
+        context: async ({ req }) => ({
+          token: req.headers.authorization,
+        }),
+      })
     );
+    httpServer.listen(PORT, () => {
+      console.log(
+        `🚀 Query endpoint ready at http://localhost:${PORT}/graphql`
+      );
+      console.log(
+        `🚀 Subscription endpoint ready at ws://localhost:${PORT}/graphql `
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-});
