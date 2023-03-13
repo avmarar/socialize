@@ -10,12 +10,13 @@ import {
   Icon,
   Label,
   Button,
+  Header,
 } from "semantic-ui-react";
 
 import { AuthContext } from "../context/auth";
 import LikeButton from "../components/LikeButton";
 import DeleteButton from "../components/DeleteButton";
-import Comments from "../components/Comments";
+import CommentForm from "../components/CommentForm";
 
 import { GET_POST } from "../graphql/queries";
 
@@ -78,9 +79,27 @@ const Post = () => {
                 )}
               </Card.Content>
             </Card>
-            {comments && (
-              <Comments user={user} comments={comments} postId={id} />
-            )}
+            <Header as="h3" dividing>
+              Comments
+            </Header>
+            {comments &&
+              comments.map((comment) => (
+                <Card fluid key={comment.id}>
+                  <Card.Content>
+                    <Card.Header>{comment.username}</Card.Header>
+                    <Card.Meta>
+                      <span className="date">
+                        {moment(comment.createdAt).fromNow(true)}
+                      </span>
+                    </Card.Meta>
+                    <Card.Description>{comment.body}</Card.Description>
+                    {user && user.username === comment.username && (
+                      <DeleteButton postId={postId} commentId={comment.id} />
+                    )}
+                  </Card.Content>
+                </Card>
+              ))}
+            <CommentForm postId={postId} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

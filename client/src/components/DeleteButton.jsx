@@ -3,17 +3,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Confirm, Icon } from "semantic-ui-react";
 
-import { DELETE_POST } from "../graphql/mutations";
+import { DELETE_COMMENT, DELETE_POST } from "../graphql/mutations";
 import { GET_POSTS } from "../graphql/queries";
 
-const DeleteButton = ({ postId }) => {
+const DeleteButton = ({ postId, commentId }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const mutation = commentId ? DELETE_COMMENT : DELETE_POST;
   const navigate = useNavigate();
-  const [deletePost] = useMutation(DELETE_POST, {
-    variables: { postId },
+  const [deletePostOrComment] = useMutation(mutation, {
+    variables: commentId ? { postId, commentId } : { postId },
     onCompleted: () => {
       setConfirmOpen(false);
-      navigate("/");
+      if (!commentId) navigate("/");
     },
     refetchQueries: [{ query: GET_POSTS }, "GetPosts"],
   });
@@ -31,7 +32,7 @@ const DeleteButton = ({ postId }) => {
       <Confirm
         open={confirmOpen}
         onCancel={() => setConfirmOpen(false)}
-        onConfirm={() => deletePost()}
+        onConfirm={() => deletePostOrComment()}
         content="Are you sure you want to delete the post?"
         confirmButton="Confirm"
       />

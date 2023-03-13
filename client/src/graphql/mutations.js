@@ -79,11 +79,16 @@ const CREATE_COMMENT = gql`
 `;
 
 const DELETE_COMMENT = gql`
-  mutation DeleteComment($body: String!, $commentId: ID!) {
-    deleteComment(body: $body, commentId: $commentId) {
+  mutation DeleteComment($postId: ID!, $commentId: ID!) {
+    deleteComment(postId: $postId, commentId: $commentId) {
       id
-      createdAt
-      username
+      comments {
+        id
+        username
+        createdAt
+        body
+      }
+      commentCount
     }
   }
 `;
