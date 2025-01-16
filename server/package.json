@@ -21,7 +21,7 @@
     "graphql": "^16.9.0",
     "graphql-ws": "^5.11.3",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.13.5",
+    "mongoose": "^8.9.5",
     "ws": "^8.18.0"
   },
   "type": "module",
